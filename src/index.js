@@ -139,8 +139,19 @@ class Defender {
         let row = Math.floor(this.currentFrame / this.columns);
            
         ctx.drawImage(this.squidImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, this.x, this.y, this.width, this.height)
-   
-        
+    }
+    draw_healthbar() {
+        ctx.beginPath();
+        ctx.rect(this.x , this.y, this.width * (this.health/100), 5);
+        if(this.health > 75){
+            ctx.fillStyle="green"
+        }else if(this.health > 50){
+            ctx.fillStyle="gold"
+        }else{
+          ctx.fillStyle="red";
+        }
+        ctx.closePath();
+        ctx.fill();
     }
     update(){
         if (this.shooting){
@@ -169,6 +180,7 @@ canvas.addEventListener('click', function(){
 function handleDefenders(){
     for (let i = 0; i < defenders.length; i++){
         defenders[i].draw();
+        defenders[i].draw_healthbar();
         defenders[i].update();
         if (enemyPositions.indexOf(defenders[i].y) !== -1){
             defenders[i].shooting = true;
@@ -221,20 +233,37 @@ class Enemy {
         }
         let column = this.currentFrame % this.columns;
         let row = Math.floor(this.currentFrame / this.columns);
-           
+
         ctx.drawImage(this.patrickImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, this.x, this.y, this.width, this.height)
+    }
+
+    draw_healthbar() {
+        ctx.beginPath();
+        ctx.rect(this.x, this.y, this.width * (this.health/100), 5);
+        if(this.health > 75){
+            ctx.fillStyle="green"
+        }else if(this.health > 50){
+            ctx.fillStyle="gold"
+        }else{
+          ctx.fillStyle="red";
+        }
+        ctx.closePath();
+        ctx.fill();
     }
 }
 function handleEnemies(){
     for (let i = 0; i < enemies.length; i++){
         enemies[i].draw();
+        enemies[i].draw_healthbar();
         enemies[i].update();
         if (enemies[i].x > canvas.width -90){
             lives -= 1;
+            const findThisIndex = enemyPositions.indexOf(enemies[i].y);
+            enemyPositions.splice(findThisIndex, 1)
             enemies.splice(i, 1)
             if (lives === 0)  gameOver = true;
         }
-        if (enemies[i].health <= 0){
+        if (enemies[i] && enemies[i].health <= 0){
             let gainedResources = enemies[i].maxHealth/10;
             numberOfResources += gainedResources;
             score += gainedResources;

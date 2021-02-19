@@ -266,6 +266,23 @@ var Defender = /*#__PURE__*/function () {
       ctx.drawImage(this.squidImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, this.x, this.y, this.width, this.height);
     }
   }, {
+    key: "draw_healthbar",
+    value: function draw_healthbar() {
+      ctx.beginPath();
+      ctx.rect(this.x, this.y, this.width * (this.health / 100), 5);
+
+      if (this.health > 75) {
+        ctx.fillStyle = "green";
+      } else if (this.health > 50) {
+        ctx.fillStyle = "gold";
+      } else {
+        ctx.fillStyle = "red";
+      }
+
+      ctx.closePath();
+      ctx.fill();
+    }
+  }, {
     key: "update",
     value: function update() {
       if (this.shooting) {
@@ -303,6 +320,7 @@ canvas.addEventListener('click', function () {
 function handleDefenders() {
   for (var i = 0; i < defenders.length; i++) {
     defenders[i].draw();
+    defenders[i].draw_healthbar();
     defenders[i].update();
 
     if (enemyPositions.indexOf(defenders[i].y) !== -1) {
@@ -370,6 +388,23 @@ var Enemy = /*#__PURE__*/function () {
       var row = Math.floor(this.currentFrame / this.columns);
       ctx.drawImage(this.patrickImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, this.x, this.y, this.width, this.height);
     }
+  }, {
+    key: "draw_healthbar",
+    value: function draw_healthbar() {
+      ctx.beginPath();
+      ctx.rect(this.x, this.y, this.width * (this.health / 100), 5);
+
+      if (this.health > 75) {
+        ctx.fillStyle = "green";
+      } else if (this.health > 50) {
+        ctx.fillStyle = "gold";
+      } else {
+        ctx.fillStyle = "red";
+      }
+
+      ctx.closePath();
+      ctx.fill();
+    }
   }]);
 
   return Enemy;
@@ -378,20 +413,25 @@ var Enemy = /*#__PURE__*/function () {
 function handleEnemies() {
   for (var i = 0; i < enemies.length; i++) {
     enemies[i].draw();
+    enemies[i].draw_healthbar();
     enemies[i].update();
 
     if (enemies[i].x > canvas.width - 90) {
       lives -= 1;
+      var findThisIndex = enemyPositions.indexOf(enemies[i].y);
+      enemyPositions.splice(findThisIndex, 1);
       enemies.splice(i, 1);
       if (lives === 0) gameOver = true;
     }
 
-    if (enemies[i].health <= 0) {
+    if (enemies[i] && enemies[i].health <= 0) {
       var gainedResources = enemies[i].maxHealth / 10;
       numberOfResources += gainedResources;
       score += gainedResources;
-      var findThisIndex = enemyPositions.indexOf(enemies[i].y);
-      enemyPositions.splice(findThisIndex, 1);
+
+      var _findThisIndex = enemyPositions.indexOf(enemies[i].y);
+
+      enemyPositions.splice(_findThisIndex, 1);
       enemies.splice(i, 1);
       i--;
     }
