@@ -110,6 +110,7 @@ var enemiesInterval = 200;
 var frame = 0;
 var gameOver = false;
 var score = 0;
+var lives = 5;
 var winningScore = 100;
 var gameGrid = [];
 var defenders = [];
@@ -380,8 +381,9 @@ function handleEnemies() {
     enemies[i].update();
 
     if (enemies[i].x > canvas.width - 90) {
-      gameOver = true; // lives -= 1;
-      // if (lives === 0) { gameOver = true }
+      lives -= 1;
+      enemies.splice(i, 1);
+      if (lives === 0) gameOver = true;
     }
 
     if (enemies[i].health <= 0) {
@@ -465,8 +467,9 @@ function handleResources() {
 function handleGameStatus() {
   ctx.fillStyle = 'gold';
   ctx.font = '30px Arial';
-  ctx.fillText('Score: ' + score, 20, 40);
+  ctx.fillText('Score: ' + score, 150, 40);
   ctx.fillText('DogeCoins: ' + numberOfResources, 20, 80);
+  ctx.fillText('Lives: ' + lives, 20, 40);
 
   if (gameOver) {
     ctx.fillStyle = 'black';
@@ -494,8 +497,9 @@ function animate() {
   handleGameStatus();
   frame++;
   if (!gameOver) requestAnimationFrame(animate);
-} // animate();
+}
 
+animate();
 
 function collision(first, second) {
   if (!(first.x > second.x + second.width || first.x + first.width < second.x || first.y > second.y + second.height || first.y + first.height < second.y)) {

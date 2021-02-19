@@ -10,6 +10,7 @@ let enemiesInterval = 200;
 let frame = 0;
 let gameOver = false;
 let score = 0;
+let lives = 5;
 const winningScore = 100;
 
 const gameGrid = [];
@@ -229,9 +230,9 @@ function handleEnemies(){
         enemies[i].draw();
         enemies[i].update();
         if (enemies[i].x > canvas.width -90){
-            gameOver = true;
-            // lives -= 1;
-            // if (lives === 0) { gameOver = true }
+            lives -= 1;
+            enemies.splice(i, 1)
+            if (lives === 0)  gameOver = true;
         }
         if (enemies[i].health <= 0){
             let gainedResources = enemies[i].maxHealth/10;
@@ -300,8 +301,9 @@ function handleResources(){
 function handleGameStatus(){
     ctx.fillStyle = 'gold';
     ctx.font = '30px Arial';
-    ctx.fillText('Score: ' + score, 20, 40);
+    ctx.fillText('Score: ' + score, 150, 40);
     ctx.fillText('DogeCoins: ' + numberOfResources, 20, 80);
+    ctx.fillText('Lives: ' + lives, 20, 40)
     if (gameOver){
         ctx.fillStyle = 'black';
         ctx.font = '90px Arial';
@@ -330,7 +332,7 @@ function animate(){
     frame++;
     if (!gameOver) requestAnimationFrame(animate);
 }
-// animate();
+animate();
 
 function collision(first, second){
     if (    !(first.x > second.x + second.width ||
