@@ -3,7 +3,7 @@ body {
     background: #141414;
     height: 100%;
 	overflow: hidden;
-	margin: none;
+	margin: 0px;
 }
 
 .layout {
@@ -36,6 +36,10 @@ body {
     5px 22px 10px rgba(255,238,0,0.2),
     5px 25px 35px rgba(255, 238, 0, 0.2),
     5px 30px 60px rgba(255,238,0,0.4);
+	-webkit-user-select: none; 
+    -moz-user-select: none;     
+    -ms-user-select: none;     
+    user-select: none; 
 }
 
 .moon {
@@ -139,11 +143,10 @@ body {
 	border: 1px solid #888;
 	width: 50%; 
 	height: 400px;
-	/* z-index: 4; */
 }
   
 .close {
-	color: #aaa;
+	color: #141414;
 	float: right;
 	font-size: 28px;
 	font-weight: bold;
@@ -151,7 +154,7 @@ body {
   
 .close:hover,
 .close:focus {
-	color: black;
+	color: lightgrey;
 	text-decoration: none;
 	cursor: pointer;
 }
@@ -173,4 +176,43 @@ body {
     left: 75%;
     transform: translate(-25%, -50%);
 	z-index: 1;
+}
+
+.footer {
+	position: fixed;
+	bottom: 0px;
+	width: 100vw;
+	margin: 0px;
+	padding: none;
+  	display: flex;
+  	align-content: center;
+  	justify-content: center;
+  	background: linear-gradient(to bottom, rgba(90, 90, 90, 1),rgba(226, 218, 114, 0.883));
+
+}
+.gitHub {
+    background-size: cover;
+    width: 70px;
+    height: 70px;
+    align-self: center;
+    margin: 10px;
+	margin-bottom: 40px;
+}
+
+.gitHub:hover {
+	cursor: pointer;
+}
+
+.linkedIn {
+    background-size: cover;
+    width: 70px;
+    height: 70px;
+    align-self: center;
+    margin: 10px;
+	margin-bottom: 40px;
+
+}
+
+.linkedIn:hover {
+	cursor: pointer;
 }

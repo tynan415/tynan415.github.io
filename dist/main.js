@@ -151,7 +151,7 @@ var Cell = /*#__PURE__*/function () {
     key: "draw",
     value: function draw() {
       if (mouse.x && mouse.y && collision(this, mouse)) {
-        ctx.strokeStyle = 'black';
+        ctx.strokeStyle = 'yellow';
         ctx.strokeRect(this.x, this.y, this.width, this.height);
       }
     }
@@ -494,9 +494,8 @@ function animate() {
   handleGameStatus();
   frame++;
   if (!gameOver) requestAnimationFrame(animate);
-}
+} // animate();
 
-animate();
 
 function collision(first, second) {
   if (!(first.x > second.x + second.width || first.x + first.width < second.x || first.y > second.y + second.height || first.y + first.height < second.y)) {

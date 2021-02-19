@@ -48,11 +48,12 @@ class Cell {
     }
     draw(){
         if (mouse.x && mouse.y && collision(this, mouse)){
-            ctx.strokeStyle = 'black';
+            ctx.strokeStyle = 'yellow';
             ctx.strokeRect(this.x, this.y, this.width, this.height);
         }
     }
 }
+
 function createGrid(){
     for (let y = cellSize; y < canvas.height; y += cellSize){
         for (let x = 0; x < canvas.width; x += cellSize){
@@ -329,7 +330,7 @@ function animate(){
     frame++;
     if (!gameOver) requestAnimationFrame(animate);
 }
-animate();
+// animate();
 
 function collision(first, second){
     if (    !(first.x > second.x + second.width ||
