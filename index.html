@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="src/styles.css" />
+    <script src="https://kit.fontawesome.com/221602bdfb.js" crossorigin="anonymous"></script>
     <title>Tower Defense</title>
 </head>
 <body>
@@ -14,7 +15,8 @@
     
     <!-- controls modal -->
     <button id="myBtn">How To Play</button>
-     
+    
+
     <div id="myModal" class="modal">
      
       <div class="modal-content">
@@ -22,9 +24,10 @@
         <img src="./dist/sprites/SquidwardStory.png" alt="squidward" class="modalImg">
         <span>
           <p>Hi im Squidward I've recently moved here to the moon to get away from my annoying neighbors spongebob and patrick.
-           Unfortunately for me one of them has followed me here. I need your help to keep them away from my house.
+           Unfortunately for me one of them has followed me here. I need your help to keep him away from my house.
            If you wouldn't mind placing these clones of mine by left clicking in the yellow box im sure
-           the music they play will keep patrick at bay. If too many patricks get by I wont get any piece and quiet
+           the music they play will keep the patricks at bay. Im paying for all these clones with these neat little coins i found here.
+           You can collect more coins by scrolling over them with your mouse or defeating a patrick. If too many patricks get by I wont get any piece and quiet
            so stop as many as you can. Oh and another thing if my clones are in close contact with a patrick for too long
            they will disappear.
           </p>
@@ -32,7 +35,10 @@
       </div>
     </div>
     <!-- game box -->
+      <button id="startBtn" class="startBtn" >PLAY!</button>
+
       <canvas id="canvas"></canvas>
+      <i class="fas fa-volume-mute fa-2x" id='muteToggle'></i>
       <img src="./dist/sprites/Home.png" alt="home" class="home">
       <script src="dist/main.js" ></script>
     </div>

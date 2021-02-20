@@ -118,6 +118,22 @@ var enemies = [];
 var enemyPositions = [];
 var projectiles = [];
 var resources = [];
+var audio = new Audio();
+audio.src = './dist/music/clarinetStroll.mp3';
+var toggleVolume = document.getElementById('muteToggle');
+toggleVolume.addEventListener('click', function () {
+  if (audio.volume > 0) {
+    audio.play();
+    audio.volume = 0;
+    toggleVolume.classList.remove('fa-volume-up');
+    toggleVolume.classList.add('fa-volume-mute');
+  } else if (audio.volume === 0) {
+    audio.volume = 0.8;
+    audio.play();
+    toggleVolume.classList.remove('fa-volume-mute');
+    toggleVolume.classList.add('fa-volume-up');
+  }
+});
 var mouse = {
   x: 0,
   y: 0,
@@ -539,7 +555,11 @@ function animate() {
   if (!gameOver) requestAnimationFrame(animate);
 }
 
-animate();
+var playButton = document.getElementById('startBtn');
+playButton.addEventListener('click', function (e) {
+  animate();
+  e.target.classList.add('hidden');
+});
 
 function collision(first, second) {
   if (!(first.x > second.x + second.width || first.x + first.width < second.x || first.y > second.y + second.height || first.y + first.height < second.y)) {
