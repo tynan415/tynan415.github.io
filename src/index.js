@@ -5,13 +5,16 @@ canvas.height = 600;
 
 const cellSize = 100;
 const cellGap = 3;
-let numberOfResources = 300;
-let enemiesInterval = 200;
+let numberOfResources = 3000;
+let enemiesInterval = 100;
 let frame = 0;
 let gameOver = false;
+let lvlOver = false;
 let score = 0;
 let lives = 5;
-const winningScore = 100;
+let level = 1;
+let winningScore = 100;
+let betweenLvl = false;
 
 const gameGrid = [];
 const defenders = [];
@@ -37,12 +40,6 @@ toggleVolume.addEventListener('click', () => {
             toggleVolume.classList.add('fa-volume-up')
         }
 })
-
-
-
-    
-      
-
 
 const mouse = {
     x: 0,
@@ -79,7 +76,7 @@ class Cell {
     }
 }
 
-function createGrid(){
+function createGrid() {
     for (let y = cellSize; y < canvas.height; y += cellSize){
         for (let x = 0; x < canvas.width; x += cellSize){
             gameGrid.push(new Cell(x, y));
@@ -96,7 +93,7 @@ function handleGameGrid(){
 class Projectile {
     constructor(x, y){
         this.x = x;
-        this.y = y-30;
+        this.y = y - 30;
         this.width = 40;
         this.height = 40;
         this.power = 20;
@@ -201,7 +198,7 @@ canvas.addEventListener('click', function(){
         numberOfResources -= defenderCost;
     }
 });
-function handleDefenders(){
+function handleDefenders() {
     for (let i = 0; i < defenders.length; i++){
         defenders[i].draw();
         defenders[i].draw_healthbar();
@@ -252,7 +249,7 @@ class Enemy {
             this.currentFrame++;
         }
         let maxFrame = this.columns * this.rows - 1;
-        if (this.currentFrame > maxFrame){
+        if (this.currentFrame > maxFrame) {
             this.currentFrame = 0;
         }
         let column = this.currentFrame % this.columns;
@@ -264,11 +261,11 @@ class Enemy {
     draw_healthbar() {
         ctx.beginPath();
         ctx.rect(this.x, this.y, this.width * (this.health/100), 5);
-        if(this.health > 75){
+        if (this.health > 75) {
             ctx.fillStyle="green"
-        }else if(this.health > 50){
+        } else if (this.health > 50){
             ctx.fillStyle="gold"
-        }else{
+        } else {
           ctx.fillStyle="red";
         }
         ctx.closePath();
@@ -337,7 +334,7 @@ class Resource {
         ctx.drawImage(this.coinImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, this.x, this.y, this.width, this.height)
     }
 }
-function handleResources(){
+function handleResources() {
     if (frame % 400 === 0 && score < winningScore){
         resources.push(new Resource());
     }
@@ -351,40 +348,81 @@ function handleResources(){
     }
 }
 
-function handleGameStatus(){
+function handleGameStatus() {
     ctx.fillStyle = 'gold';
     ctx.font = '30px Arial';
-    ctx.fillText('Score: ' + score, 150, 40);
+    ctx.fillText('Score: ' + score, 270, 40);
     ctx.fillText('DogeCoins: ' + numberOfResources, 20, 80);
     ctx.fillText('Lives: ' + lives, 20, 40)
-    if (gameOver){
+    ctx.fillText('Level: ' + level, 150, 40)
+
+    if (gameOver) {
         ctx.fillStyle = 'black';
         ctx.font = '90px Arial';
         ctx.fillText('GAME OVER', 135, 330);
     }
-    if (score >= winningScore && enemies.length === 0){
-        ctx.fillStyle = 'black';
-        ctx.font = '60px Arial';
-        ctx.fillText('LEVEL COMPLETE', 130, 300);
-        ctx.font = '30px Arial';
-        // ctx.fillText('You win!', 134, 340);
-    }
 }
 
 
-function animate(){
+let seconds = 5;
+function handleLvl() {
+     
+        ctx.fillStyle = 'gold';
+        ctx.font = '60px Arial';-
+        ctx.fillText('LEVEL ' + level + ' COMPLETE' , 160, 300);
+      
+       ctx.fillStyle = 'gold';
+        ctx.font = '45px Arial';
+        ctx.fillText('next level in: ' + (seconds), 300, 350);  
+}
+
+
+let interval;
+let currentLvl;
+
+function animate() {
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-    ctx.fillRect(0,0,controlsBar.width, controlsBar.height);
-    handleGameGrid();
+    ctx.fillRect(0, 0, controlsBar.width, controlsBar.height);
+
     handleDefenders();
+    handleGameGrid();  
     handleResources();
     handleProjectiles();
+    
     handleEnemies();
     handleGameStatus();
+
+
+    if (frame === 0) {
+        interval = setInterval(() => {
+            if (score >= winningScore && enemies.length === 0) {
+                seconds -= 1;
+            }
+        }, 1000)
+
+    }
     frame++;
+
+    if (seconds < 0) {
+        clearInterval(interval)
+        seconds = 5;
+        winningScore += winningScore;
+        if (enemiesInterval > 10) {
+            enemiesInterval -= 10;
+        }
+        level += 1;
+        frame = 0;
+    };
+   
+    
+    if (score >= winningScore && enemies.length === 0) { 
+        handleLvl();
+    }
     if (!gameOver) requestAnimationFrame(animate);
 }
+
 let playButton = document.getElementById('startBtn')
 
 playButton.addEventListener('click', (e) => {
@@ -392,7 +430,7 @@ playButton.addEventListener('click', (e) => {
     e.target.classList.add('hidden')
 })
 
-function collision(first, second){
+function collision(first, second) {
     if (    !(first.x > second.x + second.width ||
                 first.x + first.width < second.x ||
                 first.y > second.y + second.height ||

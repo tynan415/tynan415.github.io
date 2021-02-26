@@ -105,13 +105,16 @@ canvas.width = 900;
 canvas.height = 600;
 var cellSize = 100;
 var cellGap = 3;
-var numberOfResources = 300;
-var enemiesInterval = 200;
+var numberOfResources = 3000;
+var enemiesInterval = 100;
 var frame = 0;
 var gameOver = false;
+var lvlOver = false;
 var score = 0;
 var lives = 5;
+var level = 1;
 var winningScore = 100;
+var betweenLvl = false;
 var gameGrid = [];
 var defenders = [];
 var enemies = [];
@@ -523,35 +526,72 @@ function handleResources() {
 function handleGameStatus() {
   ctx.fillStyle = 'gold';
   ctx.font = '30px Arial';
-  ctx.fillText('Score: ' + score, 150, 40);
+  ctx.fillText('Score: ' + score, 270, 40);
   ctx.fillText('DogeCoins: ' + numberOfResources, 20, 80);
   ctx.fillText('Lives: ' + lives, 20, 40);
+  ctx.fillText('Level: ' + level, 150, 40);
 
   if (gameOver) {
     ctx.fillStyle = 'black';
     ctx.font = '90px Arial';
     ctx.fillText('GAME OVER', 135, 330);
   }
-
-  if (score >= winningScore && enemies.length === 0) {
-    ctx.fillStyle = 'black';
-    ctx.font = '60px Arial';
-    ctx.fillText('LEVEL COMPLETE', 130, 300);
-    ctx.font = '30px Arial'; // ctx.fillText('You win!', 134, 340);
-  }
 }
+
+var seconds = 5;
+
+function handleLvl() {
+  ctx.fillStyle = 'gold';
+  ctx.font = '60px Arial';
+  -ctx.fillText('LEVEL ' + level + ' COMPLETE', 160, 300);
+  ctx.fillStyle = 'gold';
+  ctx.font = '45px Arial';
+  ctx.fillText('next level in: ' + seconds, 300, 350);
+}
+
+var interval;
+var currentLvl;
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
   ctx.fillRect(0, 0, controlsBar.width, controlsBar.height);
-  handleGameGrid();
   handleDefenders();
+  handleGameGrid();
   handleResources();
   handleProjectiles();
   handleEnemies();
   handleGameStatus();
+
+  if (frame === 0) {
+    interval = setInterval(function () {
+      if (score >= winningScore && enemies.length === 0) {
+        seconds -= 1;
+      }
+    }, 1000);
+  }
+
   frame++;
+
+  if (seconds < 0) {
+    clearInterval(interval);
+    seconds = 5;
+    winningScore += winningScore;
+
+    if (enemiesInterval > 10) {
+      enemiesInterval -= 10;
+    }
+
+    level += 1;
+    frame = 0;
+  }
+
+  ;
+
+  if (score >= winningScore && enemies.length === 0) {
+    handleLvl();
+  }
+
   if (!gameOver) requestAnimationFrame(animate);
 }
 

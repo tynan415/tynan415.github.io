@@ -166,8 +166,9 @@ body {
 	height: 60px;
 	width: 90px;
 	z-index: 2;
-	color: white;
+	color: darkslategrey;
 	background-color: rgba(170, 253, 253, 0.712);
+	font-weight: 800;
 }
 
 .startBtn {
@@ -178,8 +179,9 @@ body {
 	height: 60px;
 	width: 90px;
 	z-index: 3;
-	color: rgb(146, 146, 146);
+	color: darkslategrey;
 	background-color: rgba(170, 253, 253, 0.712);
+	font-weight: 800;
 }
 
 /* top: 25%; */
