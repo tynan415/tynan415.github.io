@@ -105,16 +105,14 @@ canvas.width = 900;
 canvas.height = 600;
 var cellSize = 100;
 var cellGap = 3;
-var numberOfResources = 3000;
-var enemiesInterval = 100;
+var numberOfResources = 350;
+var enemiesInterval = 260;
 var frame = 0;
 var gameOver = false;
-var lvlOver = false;
 var score = 0;
 var lives = 5;
 var level = 1;
 var winningScore = 100;
-var betweenLvl = false;
 var gameGrid = [];
 var defenders = [];
 var enemies = [];
@@ -351,7 +349,7 @@ function handleDefenders() {
     for (var j = 0; j < enemies.length; j++) {
       if (defenders[i] && collision(defenders[i], enemies[j])) {
         enemies[j].movement = 0;
-        defenders[i].health -= 1;
+        defenders[i].health -= 0.5;
       }
 
       if (defenders[i] && defenders[i].health <= 0) {
@@ -371,7 +369,7 @@ var Enemy = /*#__PURE__*/function () {
     this.y = verticalPosition;
     this.width = cellSize - cellGap * 2;
     this.height = cellSize - cellGap * 2;
-    this.speed = Math.random() * 0.2 + 0.4;
+    this.speed = Math.random() * 0.5 + 0.7;
     this.movement = this.speed;
     this.health = 100;
     this.maxHealth = this.health;
@@ -460,7 +458,7 @@ function handleEnemies() {
     var verticalPosition = Math.floor(Math.random() * 5 + 1) * cellSize + cellGap;
     enemies.push(new Enemy(verticalPosition));
     enemyPositions.push(verticalPosition);
-    if (enemiesInterval > 120) enemiesInterval -= 50;
+    if (enemiesInterval > 120) enemiesInterval -= 40;
   }
 }
 
@@ -538,7 +536,7 @@ function handleGameStatus() {
   }
 }
 
-var seconds = 5;
+var seconds = 15;
 
 function handleLvl() {
   ctx.fillStyle = 'gold';
@@ -575,7 +573,7 @@ function animate() {
 
   if (seconds < 0) {
     clearInterval(interval);
-    seconds = 5;
+    seconds = 15;
     winningScore += winningScore;
 
     if (enemiesInterval > 10) {

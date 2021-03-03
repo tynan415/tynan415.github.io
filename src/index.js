@@ -5,16 +5,14 @@ canvas.height = 600;
 
 const cellSize = 100;
 const cellGap = 3;
-let numberOfResources = 3000;
-let enemiesInterval = 100;
+let numberOfResources = 350;
+let enemiesInterval = 260;
 let frame = 0;
 let gameOver = false;
-let lvlOver = false;
 let score = 0;
 let lives = 5;
 let level = 1;
 let winningScore = 100;
-let betweenLvl = false;
 
 const gameGrid = [];
 const defenders = [];
@@ -101,10 +99,11 @@ class Projectile {
         this.squidImage = new Image();
         this.squidImage.src = './dist/sprites/notes2.png';
     }
-    update(){
+    update() {
         this.x += this.speed;
     }
-    draw(){
+
+    draw() {
       
         ctx.drawImage(this.squidImage,  this.x, this.y, this.width, this.height)
     }
@@ -211,7 +210,7 @@ function handleDefenders() {
         for (let j = 0; j < enemies.length; j++){
             if (defenders[i] && collision(defenders[i], enemies[j])){
                 enemies[j].movement = 0;
-                defenders[i].health -= 1;
+                defenders[i].health -= 0.5;
             }
             if (defenders[i] && defenders[i].health <= 0){
                 defenders.splice(i, 1);
@@ -228,7 +227,7 @@ class Enemy {
         this.y = verticalPosition;
         this.width = cellSize - cellGap * 2;
         this.height = cellSize - cellGap * 2;
-        this.speed = Math.random() * 0.2 + 0.4;
+        this.speed = Math.random() * 0.5 + 0.7;
         this.movement = this.speed;
         this.health = 100;
         this.maxHealth = this.health;
@@ -298,7 +297,7 @@ function handleEnemies(){
         let verticalPosition = Math.floor(Math.random() * 5 + 1) * cellSize + cellGap;
         enemies.push(new Enemy(verticalPosition));
         enemyPositions.push(verticalPosition);
-        if (enemiesInterval > 120) enemiesInterval -= 50;
+        if (enemiesInterval > 120) enemiesInterval -= 40;
     }
 }
 
@@ -364,7 +363,7 @@ function handleGameStatus() {
 }
 
 
-let seconds = 5;
+let seconds = 15;
 function handleLvl() {
      
         ctx.fillStyle = 'gold';
@@ -407,7 +406,7 @@ function animate() {
 
     if (seconds < 0) {
         clearInterval(interval)
-        seconds = 5;
+        seconds = 15;
         winningScore += winningScore;
         if (enemiesInterval > 10) {
             enemiesInterval -= 10;
