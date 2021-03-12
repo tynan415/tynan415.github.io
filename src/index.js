@@ -460,3 +460,5 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+// dont forget to change logic
