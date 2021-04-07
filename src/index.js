@@ -20,23 +20,23 @@ const enemies = [];
 const enemyPositions = [];
 const projectiles = [];
 const resources = [];
-const audio = new Audio()
-audio.src = './dist/music/clarinetStroll.mp3'
+const audio = new Audio();
+audio.src = './dist/music/clarinetStroll.mp3';
 
 let toggleVolume = document.getElementById('muteToggle')
 toggleVolume.addEventListener('click', () => {
 
-        if(audio.volume > 0){
-            audio.play();
-            audio.volume = 0
-            toggleVolume.classList.remove('fa-volume-up')
-            toggleVolume.classList.add('fa-volume-mute')
-        }else if(audio.volume === 0){
-            audio.volume = 0.8
-            audio.play();
-            toggleVolume.classList.remove('fa-volume-mute')
-            toggleVolume.classList.add('fa-volume-up')
-        }
+    if(audio.volume > 0){
+        audio.play();
+        audio.volume = 0
+        toggleVolume.classList.remove('fa-volume-up')
+        toggleVolume.classList.add('fa-volume-mute')
+    }else if(audio.volume === 0){
+        audio.volume = 0.8
+        audio.play();
+        toggleVolume.classList.remove('fa-volume-mute')
+        toggleVolume.classList.add('fa-volume-up')
+    }
 })
 
 const mouse = {
@@ -45,12 +45,13 @@ const mouse = {
     width: 0.1,
     height: 0.1,
 }
+
 let canvasPosition = canvas.getBoundingClientRect();
-canvas.addEventListener('mousemove', function(e){
+canvas.addEventListener('mousemove', function(e) {
     mouse.x = e.x - canvasPosition.left;
     mouse.y = e.y - canvasPosition.top;
 });
-canvas.addEventListener('mouseleave', function(){
+canvas.addEventListener('mouseleave', function() {
     mouse.y = undefined;
     mouse.y = undefined;
 });
@@ -60,13 +61,13 @@ const controlsBar = {
     height: cellSize,
 }
 class Cell {
-    constructor(x, y){
+    constructor(x, y) {
         this.x = x;
         this.y = y;
         this.width = cellSize;
         this.height = cellSize;
     }
-    draw(){
+    draw() {
         if (mouse.x && mouse.y && collision(this, mouse)){
             ctx.strokeStyle = 'yellow';
             ctx.strokeRect(this.x, this.y, this.width, this.height);
@@ -108,7 +109,8 @@ class Projectile {
         ctx.drawImage(this.squidImage,  this.x, this.y, this.width, this.height)
     }
 }
-function handleProjectiles(){
+
+function handleProjectiles() {
     for (let i = 0; i < projectiles.length; i++){
         projectiles[i].update();
         projectiles[i].draw();
@@ -144,6 +146,7 @@ class Defender {
         this.columns = 15;
         this.rows = 1;
     }
+
     draw(){
         let frameWidth = this.squidImage.width / this.columns;
         let frameHeight = this.squidImage.height / this.rows;
@@ -160,6 +163,7 @@ class Defender {
            
         ctx.drawImage(this.squidImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, this.x, this.y, this.width, this.height)
     }
+
     draw_healthbar() {
         ctx.beginPath();
         ctx.rect(this.x , this.y, this.width * (this.health/100), 5);
@@ -173,6 +177,7 @@ class Defender {
         ctx.closePath();
         ctx.fill();
     }
+
     update(){
         if (this.shooting){
             this.timer++;
@@ -184,6 +189,7 @@ class Defender {
         }
     }
 }
+
 canvas.addEventListener('click', function(){
     const gridPositionX = mouse.x  - (mouse.x % cellSize) + cellGap;
     const gridPositionY = mouse.y - (mouse.y % cellSize) + cellGap;
@@ -197,6 +203,7 @@ canvas.addEventListener('click', function(){
         numberOfResources -= defenderCost;
     }
 });
+
 function handleDefenders() {
     for (let i = 0; i < defenders.length; i++){
         defenders[i].draw();
@@ -237,9 +244,11 @@ class Enemy {
         this.columns = 10;
         this.rows = 1;
     }
+
     update(){
         this.x += this.movement;
     }
+
     draw(){
         let frameWidth = this.patrickImage.width / this.columns;
         let frameHeight = this.patrickImage.height / this.rows;
@@ -333,6 +342,7 @@ class Resource {
         ctx.drawImage(this.coinImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, this.x, this.y, this.width, this.height)
     }
 }
+
 function handleResources() {
     if (frame % 400 === 0 && score < winningScore){
         resources.push(new Resource());
@@ -362,7 +372,6 @@ function handleGameStatus() {
     }
 }
 
-
 let seconds = 15;
 function handleLvl() {
      
@@ -374,7 +383,6 @@ function handleLvl() {
         ctx.font = '45px Arial';
         ctx.fillText('next level in: ' + (seconds), 300, 350);  
 }
-
 
 let interval;
 let currentLvl;
@@ -392,7 +400,6 @@ function animate() {
     
     handleEnemies();
     handleGameStatus();
-
 
     if (frame === 0) {
         interval = setInterval(() => {
@@ -414,7 +421,6 @@ function animate() {
         level += 1;
         frame = 0;
     };
-   
     
     if (score >= winningScore && enemies.length === 0) { 
         handleLvl();
@@ -460,5 +466,3 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
-
-// dont forget to change logic
